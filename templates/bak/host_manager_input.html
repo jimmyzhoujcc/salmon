@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+{#	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#	<meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#	<title>Salmon</title>#}
+{#    <!--/salmon css/test is ok/-->#}
+{#	<link type="text/css" href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">#}
+{#	<link type="text/css" href="../static/css/theme.css" rel="stylesheet">#}
+{##}
+{#    <!--/multi-select/-->#}
+{#    <script src="../static/plugins/jquery.multi-select.js"></script>#}
+{#    <link rel="stylesheet" type="text/css" href="../static/css/multi-select.css">#}
+{##}
+{#    <!--/tagsinput!-->#}
+{#    <script src="../static/scripts/js/jquery.tagsinput.js"></script>#}
+{#    <link rel="stylesheet" type="text/css" href="../static/css/jquery.tagsinput.css" />#}
+{##}
+{#    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>#}
+{#    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js'></script>#}
+{#	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/start/jquery-ui.css" />#}
+
+</head>
+<body>
+	<div class="wrapper">
+		<div class="container">
+			<div class="row">
+				<div class="span9">
+					<div class="content">
+						<div class="module">
+							<div class="module-head">
+								<h3>Forms</h3>
+							</div>
+							<div class="module-body">
+									<br />
+                                <!-- Tags input starts -->
+                                <link rel="stylesheet" type="text/css" href="../static/css/jquery.tagsinput.css" />
+                                <script type="text/javascript" src="../static/scripts/js/vendor/jquery.min.js"></script>
+                                <script type="text/javascript" src="../static/scripts/js/jquery.tagsinput.js"></script>
+
+	                            <script type="text/javascript">
+
+		function onAddTag(tag) {
+			alert("Added a tag: " + tag);
+		}
+		function onRemoveTag(tag) {
+			alert("Removed a tag: " + tag);
+		}
+
+		function onChangeTag(input,tag) {
+			alert("Changed a tag: " + tag);
+		}
+
+		$(function() {
+
+			$('#tags_1').tagsInput({width:'auto'});
+			$('#tags_2').tagsInput({
+				width: 'auto',
+				onChange: function(elem, elem_tags)
+				{
+					var languages = ['php','ruby','javascript'];
+					$('.tag', elem_tags).each(function()
+					{
+						if($(this).text().search(new RegExp('\\b(' + languages.join('|') + ')\\b')) >= 0)
+							$(this).css('background-color', 'yellow');
+					});
+				}
+			});
+			$('#tags_3').tagsInput({
+				width: 'auto',
+
+				//autocomplete_url:'test/fake_plaintext_endpoint.html' //jquery.autocomplete (not jquery ui)
+				autocomplete_url:'test/fake_json_endpoint.html' // jquery ui autocomplete requires a json endpoint
+			});
+		});
+	</script>
+
+		                        <form>
+                                    <p><label>Defaults:</label>
+                                    <input id="tags_1" type="text" class="tags" value="foo,bar,baz,roffle" /></p>
+                                </form>
+
+                                <!-- Tags input ends -->
+
+
+                                <!-- Form -->
+                                 <form id="demoform" action="#" method="post">
+                                 <fieldset>
+                                   <div class="widget">
+                                       <div class="body">
+
+                                       <select id='callbacks' multiple='multiple'>
+                                      {% for hg in hostgroup %}
+                                       <option value="{{hg.name}}" id="dict_result{{h.id}}">{{ hg.name }}</option>
+                                      {% endfor %}
+                                  </select>
+                                        </br>
+                                            <div class="widget">
+                                                <p><span id="result{{hg.id}}"></span></p>
+                                            </div>
+
+                                        <script type="text/javascript">
+                                            $('#callbacks').multiSelect({
+                                              afterSelect: function TagsInput(value) {
+                                                  $('#tags_1').addTag(value);
+
+                                              },
+                                              afterDeselect: function(values){
+                                                $('#tags_1').removeTag(values);
+                                              }
+                                            });
+                                          // run pre selected options
+                                            $('#pre-selected-options').multiSelect();
+                                         </script>
+
+
+                                           </div><!--/.body-->
+                                    </div><!--/.widget-->
+                                    </fieldset>
+                                  </form><!-- Form -->
+                            </div><!--/.module-body-->
+                        </div><!--/.module-->
+					</div><!--/.content-->
+				</div><!--/.span9-->
+			</div><!--/.row-->
+		</div><!--/.container-->
+	</div><!--/.wrapper-->
+
+	<div class="footer">
+		<div class="container">
+			<b class="copyright">&copy; 2018 Salmon - aaa.com </b> All rights reserved.
+		</div>
+	</div>
+<script>
+    $(document).ready(function(){
+    // query hg
+            {% for hg in hostgroup %}
+          $("#query").click(function(){
+
+              var a = $("#a").val();
+            $.get("/query/",{'a':{{ hg.id }} }, function(ret){
+                $("#result{{hg.id}}").html(ret);
+            })
+          });
+           {% endfor %}
+
+       // 字典 dict
+      {% for hg in hostgroup %}
+      $("#dict{{hg.id}}").click(function(){
+          $.getJSON('/ajax_dict/',function(ret){
+              //返回值 ret 在这里是一个字典
+              //$("#dict_result{{h.id}}").append(ret.twz + '<br>');
+              $("#dict_result{{hg.id}}").html(ret.twz);
+              // 也可以用 ret['twz']
+          })
+      })
+      {% endfor %}
+    });
+</script>
+
+
+</body>
+</html>

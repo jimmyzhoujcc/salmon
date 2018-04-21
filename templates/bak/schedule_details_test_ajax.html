@@ -1,0 +1,79 @@
+{% extends "base.html" %}{% load i18n %}{% load auth_extras %}
+
+{% block span9_content %}
+    <!-- modules scripts result start -->
+    <div class="module">
+
+        <div class="module-head">
+            <h3>Schedule | Details</h3>
+        </div>
+
+        <div class="module-body">
+            <label>Summary:</label>
+
+            <!-- Form -->
+            <form id="schedule_details" method="POST" action="/cancel_post_json_task/">
+                <table id="schedule_table" cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display" width="100%">
+                    <thead>
+                         <tr>
+                            <th width="18px">ETA</th>
+                            <th width="20px">Args</th>
+                            <th width="100px">Task id</th>
+                            <th width="18px">Status</th>
+                            <th width="200px">Result</th>
+                            <th width="10px">Operation</th>
+                        </tr>
+                    </thead>
+                    <tbody id="CmdRtList">
+{#                    <tbody id="project_service_select">#}
+                        {% for schedule in schedule_dic %}
+                            <tr>
+                                <td><font color="green">{{ schedule.eta }}</font></td>
+                                <td><font color="green">{{ schedule.args }}</font></td>
+{#                                <td>#}
+{#                                    <font color="green">{{ schedule.sid }}</font>#}
+{#                                </td>#}
+                                <div id="sid"><td>{{ schedule.sid }}</td></div>
+{#                                    <div id="dict{{schedule.sid}}">cancel{{schedule.sid}}</div>#}
+{#                                    <a id="dict_result{{schedule.sid}}"></a>#}
+
+                                {% if schedule.state == "PENDING" %}
+                                    <td><font color="#00bfff">{{ schedule.state }}</font></td>
+                                    <td><font color="yellow"></font></td>
+                                    <td>
+                                        <div id="sid"> download {{ schedule.sid }}</div>
+                                        <a id="schedule_result"></a>
+                                        <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
+                                    </td>
+                                {% elif schedule.state == 'SUCCESS' %}
+                                    <td><font color="green">{{ schedule.state }}</font></td>
+                                    <td><font color="green">{{ schedule.result }}</font></td>
+                                    <td><span class="icon icon-ok-circle"></span></td>
+                                {% else %}
+                                    <td><font color="red">{{ schedule.state }}</font></td>
+                                    <td><font color="red">{{ schedule.result }}</font></td>
+                                    <td><span class="icon icon-ban-circle"></span></td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>ETA</th>
+                            <th>Args</th>
+                            <th>Task id</th>
+                            <th>Status</th>
+                            <th>Result</th>
+                            <th>Operation</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </form><!-- Form -->
+        </div><!--/.module-body-->
+
+    </div><!--/.module-->
+    <!-- modules scripts result end -->
+
+{% endblock %}
+
+

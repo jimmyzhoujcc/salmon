@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load auth_extras %}
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Salmon</title>
+        <link type="text/css" href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link type="text/css" href="../static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link type="text/css" href="../static/css/theme.css" rel="stylesheet">
+        <link type="text/css" href="../static/images/icons/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Ansible js name is salt.js :) -->
+    <script type="text/javascript" src="../static/scripts/js/ansible.js"></script>
+
+    <style type="text/css">
+    pre
+    {
+      font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+      margin-bottom: 10px;
+      overflow: auto;
+      width: auto;
+      padding: 5px;
+      background-color: #eee;
+
+      width: 620px;
+      padding-bottom: 20px;
+      max-height: 600px;
+    }
+    </style>
+
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                        <i class="icon-reorder shaded"></i></a><a class="brand" href="/">Salmon </a>
+                    <div class="nav-collapse collapse navbar-inverse-collapse">
+                        <ul class="nav nav-icons">
+                            <li class="active"><a href="#"><i class="icon-envelope"></i></a></li>
+                            <li><a href="#"><i class="icon-eye-open"></i></a></li>
+                            <li><a href="#"><i class="icon-bar-chart"></i></a></li>
+                        </ul>
+                        <form class="navbar-search pull-left input-append" action="#">
+                        <input type="text" class="span3">
+                        <button class="btn" type="button">
+                            <i class="icon-search"></i>
+                        </button>
+                        </form>
+                        <ul class="nav pull-right">
+
+
+                            <li><a href="#">About us </a></li>
+                            <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="../static/images/user.png" class="nav-avatar" />
+                                {{ login_user.username }}
+                                <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/profile/">Your Profile</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="/login/">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.nav-collapse -->
+                </div>
+            </div>
+            <!-- /navbar-inner -->
+        </div>
+        <!-- /navbar -->
+    <!-- /navbar -->
+
+
+
+	<div class="wrapper">
+		<div class="container">
+			<div class="row">
+				<div class="span3">
+                        <div class="sidebar">
+                                                        <ul class="widget widget-menu unstyled">
+                                <li class="active"><a href="/"><i class="menu-icon icon-dashboard"></i>Dashboard
+                                </a></li>
+{#                                <li><a href="activity.html"><i class="menu-icon icon-bullhorn"></i>News Feed </a>#}
+{#                                </li>#}
+{#                                <li><a href="message.html"><i class="menu-icon icon-inbox"></i>Inbox <b class="label green pull-right">#}
+{#                                    11</b> </a></li>#}
+{#                                <li><a href="task.html"><i class="menu-icon icon-tasks"></i>Tasks <b class="label orange pull-right">#}
+{#                                    19</b> </a></li>#}
+                            </ul>
+                            <!--/.widget-nav-->
+                            <ul class="widget widget-menu unstyled">
+{#                                <li><a href="ui-button-icon.html"><i class="menu-icon icon-bold"></i> Buttons </a></li>#}
+                                <li><a href="/documents/"><i class="menu-icon icon-book"></i>Documents </a></li>
+{#                                <li><a href="form.html"><i class="menu-icon icon-paste"></i>Forms </a></li>#}
+{#                                {% if login_user.username|has_group:"Host_Manager_Group" %}#}
+{#                                <li><a href="/hosts/"><i class="menu-icon icon-table"></i>Hosts </a></li>#}
+{#                                {% else %}#}
+{#                                {% endif %}#}
+                                <li><a href="/profile/"><i class="menu-icon icon-bullhorn"></i>News Feed </a></li>
+                            </ul>
+                            <!--/.widget-nav-->
+                            <ul class="widget widget-menu unstyled">
+                                <li><a class="collapsed" data-toggle="collapse" href="#togglePages-application"><i class="menu-icon icon-group">
+                                </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                                </i>Application </a>
+                                    <ul id="togglePages-application" class="collapse unstyled">
+                                        {% if login_user.username|has_group:"Host_Manager_Group" %}
+                                        <li><a href="/login/"><i class="icon-inbox"></i>Application Manager </a></li>
+                                        {% endif %}
+                                        <li><a href="/profile/"><i class="icon-inbox"></i>Application Summary </a></li>
+                                    </ul>
+                                </li>
+
+                                <li><a class="collapsed" data-toggle="collapse" href="#togglePages-hosts"><i class="menu-icon icon-hdd">
+                                </i><i class="icon-chevron-up pull-right"></i><i class="icon-chevron-down pull-right">
+                                </i>Host </a>
+                                    <ul id="togglePages-hosts" class="collapse unstyled">
+                                        {% if login_user.username|has_group:"Host_Manager_Group" %}
+                                        <li><a href="/host_manager/"><i class="icon-inbox"></i>Host Manager </a></li>
+                                        {% endif %}
+                                        <li><a href="/hosts/"><i class="icon-inbox"></i>Host Summary </a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="/charts/"><i class="menu-icon icon-bar-chart"></i>Monitor </a></li>
+                            </ul>
+
+                            <!--/.widget-nav-->
+                            <ul class="widget widget-menu unstyled">
+                                {% if login_user.username|has_group:"Host_Manager_Group" %}
+                                <li><a class="collapsed" data-toggle="collapse" href="#togglePages-ops"><i class="menu-icon icon-cog">
+                                </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                                </i>OPS</a>
+                                    <ul id="togglePages-ops" class="collapse unstyled">
+                                        <li><a href="/ops_command/"><i class="icon-inbox"></i>Command </a></li>
+                                        <li><a href="/profile/"><i class="icon-inbox"></i>Scripts </a></li>
+                                        <li><a href="/run_playbook/"><i class="icon-inbox"></i>Playbook </a></li>
+                                        <li><a href="/profile/"><i class="icon-inbox"></i>Deploy VM </a></li>
+{#                                        <li><a href="other-user-listing.html"><i class="icon-inbox"></i>All Users </a></li>#}
+                                    </ul>
+                                </li>
+                                {% endif %}
+                                <li><a class="collapsed" data-toggle="collapse" href="#togglePages-dev"><i class="menu-icon icon-cog">
+                                </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                                </i>Develope OPS</a>
+                                    <ul id="togglePages-dev" class="collapse unstyled">
+                                        <li><a href="/login/"><i class="icon-inbox"></i>Command </a></li>
+                                        <li><a href="#"><i class="icon-inbox" disabled></i>Deploy Application </a></li>
+{#                                        <li><a href="other-user-listing.html"><i class="icon-inbox"></i>All Users </a></li>#}
+                                    </ul>
+                                </li>
+                                <li><a href="/charts/"><i class="menu-icon icon-bar-chart"></i>Monitor </a></li>
+                                <li><a href="/login/"><i class="menu-icon icon-signout"></i>Logout </a></li>
+                            </ul>
+                        </div>
+                        <!--/.sidebar-->
+                    </div><!--/.span3-->
+
+
+				<div class="span9">
+					<div class="content">
+
+						<div class="module">
+							<div class="module-head">
+								<h3>Patch command</h3>
+							</div>
+							<div class="module-body">
+									<br />
+
+                                <!-- Tags input starts -->
+                                <label>Patch Command:</label>
+{#                                <div><input name="tags_1"  type="text" class="tags" id="tags" value="" /></div>#}
+{#                                <!-- Tags input ends -->#}
+{##}
+{#                                </br>#}
+
+                                <!-- Form -->
+          <form id="CmdForm" method="POST" action="/run_cmd/">
+		  <table width=100%>
+		  <tr>
+			  <td align='left' valign="top"><label>Hosts:</label><input name="tgt" id="tgt" value="all" ></td>
+              <td align="left" valign="top"><label>Module:</label>
+                  <select name="fun" id="fun" >
+
+                          {% for i in cmds %}
+                            <option value="{{ i }}" s>{{ i }}</option>
+                          {% endfor %}
+                  </select>
+              </td>
+              <td align="left" valign="top"><label>Command:</label><input name="arg" id="arg" value="ifconfig" size="3"></td>
+              <td align='right'><a href="javascript:void(0)" class="btn" OnClick="document.getElementById('CmdForm').submit();"><span class="icon icon-ok"></span><label>Execute</label></a></td>
+          </tr>
+          </table>
+
+          </form>
+                    <table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display" width="100%">
+						<thead>
+						 <tr>
+							<th width="38px">ID</th>
+							<th width="300px">Result</th>
+							<th width="50px">Status</th>
+					    </tr>
+						</thead>
+						<tbody id="CmdRtList">
+{#						  <tr>#}
+{#						    <td>1</td>#}
+{#                              {% if status == 'success' %}#}
+{#						        <td id="rt"><font color="green">{{ rt|safe }}</font></td>#}
+{#						        <td><font color="green">{{ status }}</font></td>#}
+{#                                  {% else %}#}
+{#                                  <td id="rt"><font color="red">{{ rt|safe }}</font></td>#}
+{#                                  <td><font color="red">{{ status }}</font></td>#}
+{#                              {% endif %}#}
+{#						  </tr>#}
+
+
+                                {% for key,value in rt.detail.items %}
+                                    <tr>
+                                        {% if value.0.rc  == 0 %}
+                                            <td><font color="green">{{ key }}</font></td>
+{#                                            <td><font color="green">{{ value.0.stdout | linebreaks }}</font></td>#}
+                                            <td><pre><font color="green">{{ value.0.stdout}}</font></pre></td>
+                                            <td><font color="green">success</font></td>
+                                        {% else %}
+                                            <td><font color="red">{{ key }}</font></td>
+                                            <td><pre><font color="red">{{ value.0.stderr}}</font></pre></td>
+                                            <td><font color="red">failed</font></td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+						</tbody>
+						<tfoot>
+							<tr>
+							<th>ID</th>
+							<th>Result</th>
+							<th>Status</th>
+					    </tr>
+						</tfoot>
+					</table>
+                                <!-- Form -->
+                            </div><!--/.module-body-->
+                        </div><!--/.module-->
+					</div><!--/.content-->
+				</div><!--/.span9-->
+			</div><!--/.row-->
+		</div><!--/.container-->
+	</div><!--/.wrapper-->
+
+	<div class="footer">
+		<div class="container">
+			<b class="copyright">&copy; 2018 Salmon - aaa.com </b> All rights reserved.
+		</div>
+	</div>
+
+<!--/query/-->
+<script>
+    $(document).ready(function(){
+    // query hg
+            {% for hg in hostgroup %}
+          $("#query").click(function(){
+
+              var a = $("#a").val();
+            $.get("/query/",{'a':{{ hg.id }} }, function(ret){
+{#              $("#result{{hg.id}}").html(ret)#}
+              $('#tags').addTag(ret.host_ip)
+            })
+          });
+           {% endfor %}
+
+      // 求和 a + b
+{#      $("#sum").click(function(){#}
+{#        var a = $("#a").val();#}
+{#        var b = $("#b").val();#}
+{##}
+{#        $.get("/add/",{'a':a,'b':b}, function(ret){#}
+{#            $('#result').html(ret);#}
+{#        })#}
+{#      });#}
+
+      // 列表 list
+      $('#list').click(function(){
+          $.getJSON('/ajax_list/',function(ret){
+            //返回值 ret 在这里是一个列表
+            for (var i = ret.length - 1; i >= 0; i--) {
+              // 把 ret 的每一项显示在网页上
+              $('#list_result').append(' ' + ret[i])
+            };
+          })
+      })
+
+{#      // 字典 dict#}
+{#      $('#dict').click(function(){#}
+{#          $.getJSON('/ajax_dict/',function(ret){#}
+{#              //返回值 ret 在这里是一个字典#}
+{#              $('#dict_result').append(ret.twz + '<br>');#}
+{#              // 也可以用 ret['twz']#}
+{#          })#}
+{#      })#}
+
+       // 字典 dict
+      {% for hg in hostgroup %}
+      $("#dict{{hg.id}}").click(function(){
+          $.getJSON('/ajax_dict/',function(ret){
+              //返回值 ret 在这里是一个字典
+              //$("#dict_result{{h.id}}").append(ret.twz + '<br>');
+              $("#dict_result{{hg.id}}").html(ret.twz);
+              // 也可以用 ret['twz']
+          })
+      })
+      {% endfor %}
+    });
+</script>
+<!--/query/-->
+
+<!--/tagsinput/-->
+<script type="text/javascript">
+
+    function onAddTag(tag) {
+        alert("Added a tag: " + tag);
+    }
+    function onRemoveTag(tag) {
+        alert("Removed a tag: " + tag);
+    }
+
+    function onChangeTag(input,tag) {
+        alert("Changed a tag: " + tag);
+    }
+
+    $(function() {
+        $('#tags_2').tagsInput({width:'auto'});
+        $('#tags').tagsInput({
+				width: 'auto',
+				onAddTag: function(elem, elem_tags)
+				{
+					var languages = ['ACLU','Active Minds'];
+					$('.tag', elem_tags).each(function()
+					{
+						if($(this).text().search(new RegExp('\\b(' + languages.join('|') + ')\\b')) >= 0)
+							$(this).css('background-color', 'yellow');
+					});
+				},
+			});
+        });
+</script>
+<!--/tagsinput/-->
+
+<!--/multiselect/-->
+<script type="text/javascript">
+        $('#callbacks').multiSelect({
+          afterSelect: function TagsInput(value) {
+{#              $('#tags_1').addTag(value);#}
+              $('#tags').addTag(value);
+
+          },
+          afterDeselect: function(values){
+            $('#tags').removeTag(values);
+          }
+        });
+      // run pre selected options
+        $('#pre-selected-options').multiSelect();
+</script>
+<!--/multiselect/-->
+
+<script src="../static/scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="../static/scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+<script src="../static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../static/scripts/flot/jquery.flot.js" type="text/javascript"></script>
+<script src="../static/scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
+<script src="../static/scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
+<script src="../static/scripts/common.js" type="text/javascript"></script>
+
+
+<script src="../static/scripts/js/jquery-3.1.1.min.js"></script>
+<script src="../static/scripts/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+

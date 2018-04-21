@@ -1,0 +1,215 @@
+﻿{% extends "base2.html" %}
+{% load i18n %}{% load auth_extras %}
+{% block css %}
+<!--/multi-select/-->
+<link rel="stylesheet" type="text/css" href="../static/css/multi-select.css">
+
+<!--/tagsinput!-->
+<link rel="stylesheet" type="text/css" href="../static/css/jquery.tagsinput.css" />
+
+<!--/xcConfirm!-->
+<link rel="stylesheet" type="text/css" href="../static/css/xcConfirm.css" />
+
+{% endblock %}
+{% block scripts %}
+<!--/tagsinput!-->
+<script type="text/javascript">
+    $.ajaxSetup({
+  data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+ </script>
+<script src="../static/scripts/js/vendor/jquery-2.1.3.min.js"></script>
+<script src="../static/scripts/js/jquery.tagsinput.js"></script>
+<script type="text/javascript">
+        function onAddTag(tag) {
+            alert("Added a tag: " + tag);
+        }
+
+        function onRemoveTag(tag) {
+            alert("Removed a tag: " + tag);
+        }
+
+        function onChangeTag(input,tag) {
+            alert("Changed a tag: " + tag);
+        }
+
+        $(function() {
+            // default tags_1
+            //$('#tags_1').tagsInput({width:'auto'});
+            // disable interactive tags_1
+            $('#tags_1').tagsInput({
+                width:'auto',
+                interactive:false
+            });
+            $('#tags_2').tagsInput({
+                width: 'auto',
+                onChange: function(elem, elem_tags)
+                {
+                    var languages = ['php','ruby','javascript'];
+                    $('.tag', elem_tags).each(function()
+                    {
+                        if($(this).text().search(new RegExp('\\b(' + languages.join('|') + ')\\b')) >= 0)
+                            $(this).css('background-color', 'yellow');
+                    });
+                }
+            });
+            $('#tags_3').tagsInput({
+                width: 'auto',
+
+                //autocomplete_url:'test/fake_plaintext_endpoint.html' //jquery.autocomplete (not jquery ui)
+                autocomplete_url:'test/fake_json_endpoint.html' // jquery ui autocomplete requires a json endpoint
+            });
+        });
+</script>
+<script>
+function queryHosts(obj) {
+    var form = document.getElementById('hostgroupform')
+    var hid = $("#{{h.id}}").attr("value")
+    var putUrl = '/query/'
+    console.log('form:',form)
+    console.log('fun:',fun)
+    for (var i = 0; i < form.length; ++i) {
+			var name = form[i].name;
+			var value = form[i].value;
+			if ( value.length == 0){
+				window.wxc.xcConfirm("请注意必填项不能为空~", window.wxc.xcConfirm.typeEnum.error);
+				return false;
+			}
+			else{
+				post_data[name] = value;
+			};
+
+		};
+    $(document).ready(function() {
+        {% for hg in hostgroup %}
+            $("#query").click(function () {
+                var a = $("#a").val();
+                console.log('a');
+                $.get("/query/", {'a':{{ hg.id }}}, function (ret) {
+                    $("#result{{hg.id}}").html(ret);
+                    //$('#tags_1').addTag(ret.host_ip)
+                })
+            })
+        {% endfor %}
+    })
+}
+</script>
+<!--/xcConfirm!-->
+<script src="../static/scripts/js/xcConfirm.js"></script>
+{% endblock %}
+
+{% block span9_content %}
+    <div class="module">
+        <div class="module-head">
+            <h3>Forms</h3>
+        </div>
+        <div class="module-body">
+            <br />
+            <!-- Tags input starts -->
+            <form>
+                <p>
+                    <label>Hosts you selected below:</label>
+                    <input id="tags_1" type="text" class="tags" value="" />
+                </p>
+            </form>
+            <!-- Tags input ends -->
+
+            <!-- Multi select starts -->
+            <script type="text/javascript" src="../static/plugins/jquery.min.js"></script>
+            <script src="../static/plugins/jquery.multi-select.js"></script>
+            <!-- Form -->
+{#            <form id="multiselectform" action="#" method="post">#}
+{#            <form id="multiselectform" action="/query/" method="get">#}
+            <form id="hostgroupform" action="/query/" method="post">
+                {% csrf_token %}
+                 <fieldset>
+                   <div class="widget">
+                       <div class="body">
+                           <select id='callbacks' multiple='multiple'>
+{#                              {% for hg in hostgroup %}#}
+{#                               <option value="{{hg.name}}" id="{{h.id}}">{{ hg.name }}</option>#}
+{#                              {% endfor %}#}
+                              {% for g in group_list %}
+                               <option value="{{g}}" id="{{g}}">{{ g }}</option>
+                              {% endfor %}
+                           </select>
+                                </br>
+{#                           <button type="button" id="{{ h.id }}">查询</button>#}
+                           <button type="button" class="btn btn-primary" onclick="queryHosts(this)">
+					        submit
+                           </button>
+                           <p class="alert-info">last added host ip: <span id="result{{hg.id}}"></span></p>
+
+{#                            {% csrf_token %}#}
+                            <script type="text/javascript">
+                                $('#callbacks').multiSelect({
+                                  afterSelect: function TagsInput(value) {
+                                      //$('#tags_1').addTag(value)
+                                      console.log(value)
+                                      var a = value.toString()
+                                      //var data = JSON.stringify({"a":a})
+                                      var data = {"a":a}
+                                      console.log(data)
+                                      $.ajax({
+                                          type: "POST",
+                                          url: "/query/",
+                                          //data: data,
+                                          data: data,
+                                          // dataType: "html",
+                                          dataType: "json",
+                                          success: function (msg) {
+                                              //msg = JSON.parse(msg)
+                                              //console.log(msg.host_ip)
+
+                                              for(var i = 0;i < msg.host_ip.length;i++){
+                                               console.log(msg.host_ip[i])
+                                               $("#result{{hg.id}}").html(msg.host_ip[i])
+                                               $('#tags_1').addTag(msg.host_ip[i])
+                                               //window.wxc.xcConfirm(msg.host_ip[i],window.wxc.xcConfirm.typeEnum.info)
+                                              }
+                                          }
+                                      })
+                                  },
+                                  afterDeselect: function(value){
+                                      //$('#tags_1').removeTag(value);
+                                      console.log(value)
+                                      var a = value.toString()
+                                      //var data = JSON.stringify({"a":a})
+                                      var data = {"a":a}
+                                      console.log(data)
+                                      $.ajax({
+                                          type: "POST",
+                                          url: "/query/",
+                                          //data: data,
+                                          data: data,
+                                          // dataType: "html",
+                                          dataType: "json",
+                                          success: function (msg) {
+                                              for(var i = 0;i < msg.host_ip.length;i++){
+                                               console.log(msg.host_ip[i])
+                                               $("#result{{hg.id}}").html(msg.host_ip[i])
+                                               $('#tags_1').removeTag(msg.host_ip[i])
+                                              }
+                                          }
+                                      })
+                                  }
+                                });
+                                $('#pre-selected-options').multiSelect();
+                             </script>
+
+                       </div><!--/.body-->
+                    </div><!--/.widget-->
+                    </fieldset>
+
+            </form><!-- Form -->
+            <!-- Multi select starts -->
+
+        </div><!--/.module-body-->
+    </div><!--/.module-->
+{% endblock %}
+
+
+
+
+
+

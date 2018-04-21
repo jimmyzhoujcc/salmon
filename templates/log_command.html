@@ -1,0 +1,70 @@
+﻿{% extends "base.html" %}{% load i18n %}{% load auth_extras %}
+{% block span9_content %}
+    <div class="module">
+        <div class="module-head">
+            <h3>Logs | Command | Error</h3>
+        </div>
+        <div class="module-body table">
+            <table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display" width="100%">
+                <thead>
+                    <tr>
+                        <th width="150">Date</th>
+                        <th>Host</th>
+                        <th>Output</th>
+{#                        <th>Status</th>#}
+                    </tr>
+                </thead>
+                <tbody>
+                {% for i in log_cmd_stderr_list %}
+                <tr class="even gradeC">
+                    <td>{{ i.ctime }}</td>
+                    <td>{{ i.host }}</td>
+                    <td>{{ i.stderr }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                       <th>Date</th>
+                        <th>Host</th>
+                        <th>Output</th>
+{#                        <th>Status</th>#}
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div><!--/.module error-->
+
+    <div class="module">
+        <div class="module-head">
+            <h3>Logs | Command | Success</h3>
+        </div>
+        <div class="module-body table">
+            <table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display" width="100%">
+                <thead>
+                    <tr>
+                        <th width="150">Date</th>
+                        <th>Host</th>
+                        <th>Output</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for j in log_cmd_stdout_list %}
+                <tr class="even gradeC">
+                    <td>{{ j.ctime }}</td>
+                    <td>{{ j.host }}</td>
+                    <td>{{ j.stdout }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                       <th width="150">Date</th>
+                        <th>Host</th>
+                        <th>Output</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div><!--/.module error-->
+{% endblock %}

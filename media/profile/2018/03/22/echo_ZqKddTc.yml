@@ -1,0 +1,16 @@
+---
+- name: This is a test yaml playbook
+  hosts: test
+  gather_facts: no
+  tasks:
+  #- name: Wait for 10 seconds
+  #  pause:
+  #    seconds: 1
+  - name: Hello world 1
+    command : echo "hello world 1"
+  - name: Show ifconfig information
+    shell: ifconfig | grep inet
+    register: hello
+  #- debug: msg="{{ hello.stdout }}"
+  - name: Date
+    command : date

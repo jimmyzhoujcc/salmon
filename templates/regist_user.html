@@ -1,0 +1,60 @@
+﻿{% extends "base.html" %}{% load i18n %}{% load auth_extras %}
+{% block span9_content %}
+    <div class="module">
+							<div class="module-head">
+								<h3>Regist Forms</h3>
+							</div>
+							<div class="module-body">
+
+									<br />
+                                    <form method = 'post' enctype="multipart/form-data">
+{#                                    {{userform.as_p}}#}
+
+                                      <div class="control-group">
+                                        <label class="control-label" for="basicinput">Username: <a>{{ userform.username }}</a></label>
+                                        <label class="control-label" for="basicinput">Password: <a>{{ userform.password }}</a></label>
+                                          <label class="control-label" for="basicinput">Email Add:<a>{{ userform.email }}</a></label>
+                                          <label class="control-label" for="basicinput">Firstname: <a>{{ userform.first_name }}</a></label>
+                                          <label class="control-label" for="basicinput">Lastname: <a>{{ userform.last_name }}</a></label>
+{#                                          <label class="control-label" for="basicinput">Superuser: <a>{{ userform.is_superuser }}</a></label>#}
+                                      </div>
+
+{#                                    <input type="submit" value = "Regist" />#}
+                                        <button type="submit" value = "Regist" class="btn">Submit Form</button>
+{#									<form class="form-horizontal row-fluid" method = 'post' enctype="multipart/form-data">#}
+{#                                    <form method = 'post' enctype="multipart/form-data">#}
+{#										<div class="control-group">#}
+{#											<label class="control-label" for="basicinput">Username</label>#}
+{#											<div class="controls">#}
+{#												<input type="text" id="basicinput" name="{{userform.username}}"  placeholder="username..." class="span8">#}
+{#                                                {{ userform.username }}#}
+{#												<span class="help-inline">Minimum 3 Characters</span>#}
+{#											</div>#}
+{#										</div>#}
+{##}
+{#										<div class="control-group">#}
+{#											<label class="control-label" for="basicinput">Password</label>#}
+{#											<div class="controls">#}
+{#                                                {{ userform.password }}#}
+{#                                                <input type="submit" value = "Regist" />#}
+{#												<input type="text" id="basicinput" name="{{ userform.password }}" placeholder="password..." class="span8">#}
+{#											</div>#}
+{#										</div>#}
+
+{#										<div class="control-group">#}
+{#											<label class="control-label" for="basicinput">Tooltip Input</label>#}
+{#											<div class="controls">#}
+{#												<input data-title="A tooltip for the input" type="text" placeholder="Hover to view the tooltip…" data-original-title="" class="span8 tip">#}
+{#											</div>#}
+{#										</div>#}
+
+{#										<div class="control-group">#}
+{#											<div class="controls">#}
+{#												<button type="submit" value = "Regist" class="btn">Submit Form</button>#}
+{#                                                <input type="submit" value = "Regist" />#}
+{#											</div>#}
+{#										</div>#}
+									</form>
+							</div>
+						</div>
+{% endblock %}

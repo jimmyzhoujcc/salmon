@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load auth_extras %}
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Salmon</title>
+        <link type="text/css" href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link type="text/css" href="../static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link type="text/css" href="../static/css/theme.css" rel="stylesheet">
+        <link type="text/css" href="../static/images/icons/css/font-awesome.css" rel="stylesheet">
+
+        <!-- pre css for stout playbook result -->
+        <style type="text/css">
+        pre
+        {
+          font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+          margin-bottom: 10px;
+          overflow: auto;
+          width: auto;
+          padding: 5px;
+          background-color: #eee;
+
+          width: 620px;
+          padding-bottom: 20px;
+          max-height: 600px;
+        }
+        </style>
+</head>
+
+<body>
+    <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                        <i class="icon-reorder shaded"></i></a><a class="brand" href="/">Salmon </a>
+                    <div class="nav-collapse collapse navbar-inverse-collapse">
+                        <ul class="nav nav-icons">
+                            <li class="active"><a href="#"><i class="icon-envelope"></i></a></li>
+                            <li><a href="#"><i class="icon-eye-open"></i></a></li>
+                            <li><a href="#"><i class="icon-bar-chart"></i></a></li>
+                        </ul>
+                        <form class="navbar-search pull-left input-append" action="#">
+                        <input type="text" class="span3">
+                        <button class="btn" type="button">
+                            <i class="icon-search"></i>
+                        </button>
+                        </form>
+                        <ul class="nav pull-right">
+                            <li><a href="#">About us </a></li>
+                            <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="../static/images/user.png" class="nav-avatar" />
+                                {{ login_user.username }}
+                                <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/profile/">Your Profile</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="/login/">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div><!-- /.nav-collapse -->
+                </div><!-- /navbar-container -->
+            </div><!-- /navbar-inner -->
+    </div><!-- /navbar -->
+
+	<div class="wrapper">
+		<div class="container">
+			<div class="row">
+				<div class="span3">
+                    <div class="sidebar">
+                         <ul class="widget widget-menu unstyled">
+                            <li class="active"><a href="/"><i class="menu-icon icon-dashboard"></i>Dashboard</a>
+                            </li>
+                        </ul>
+                        <!--/.widget-nav-->
+                        <ul class="widget widget-menu unstyled">
+                            <li><a href="/documents/"><i class="menu-icon icon-book"></i>Documents </a></li>
+                            <li><a href="/profile/"><i class="menu-icon icon-bullhorn"></i>News Feed </a></li>
+                        </ul>
+                        <!--/.widget-nav-->
+                        <ul class="widget widget-menu unstyled">
+                            <li><a class="collapsed" data-toggle="collapse" href="#togglePages-application"><i class="menu-icon icon-group">
+                            </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                            </i>Application </a>
+                                <ul id="togglePages-application" class="collapse unstyled">
+                                    {% if login_user.username|has_group:"Host_Manager_Group" %}
+                                    <li><a href="/login/"><i class="icon-inbox"></i>Application Manager </a></li>
+                                    {% endif %}
+                                    <li><a href="/profile/"><i class="icon-inbox"></i>Application Summary </a></li>
+                                </ul>
+                            </li>
+
+                            <li><a class="collapsed" data-toggle="collapse" href="#togglePages-hosts"><i class="menu-icon icon-hdd">
+                            </i><i class="icon-chevron-up pull-right"></i><i class="icon-chevron-down pull-right">
+                            </i>Host </a>
+                                <ul id="togglePages-hosts" class="collapse unstyled">
+                                    {% if login_user.username|has_group:"Host_Manager_Group" %}
+                                    <li><a href="/host_manager/"><i class="icon-inbox"></i>Host Manager </a></li>
+                                    {% endif %}
+                                    <li><a href="/hosts/"><i class="icon-inbox"></i>Host Summary </a></li>
+                                </ul>
+                            </li>
+                            <li><a href="/charts/"><i class="menu-icon icon-bar-chart"></i>Monitor </a></li>
+                        </ul>
+
+                        <!--/.widget-nav-->
+                        <ul class="widget widget-menu unstyled">
+                            {% if login_user.username|has_group:"Host_Manager_Group" %}
+                            <li><a class="collapsed" data-toggle="collapse" href="#togglePages-ops"><i class="menu-icon icon-cog">
+                            </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                            </i>OPS</a>
+                                <ul id="togglePages-ops" class="collapse unstyled">
+                                    <li><a href="/ops_command/"><i class="icon-inbox"></i>Command </a></li>
+                                    <li><a href="/profile/"><i class="icon-inbox"></i>Scripts </a></li>
+                                    <li><a href="/run_playbook//"><i class="icon-inbox"></i>Playbook </a></li>
+                                    <li><a href="/profile/"><i class="icon-inbox"></i>Deploy VM </a></li>
+                                </ul>
+                            </li>
+                            {% endif %}
+                            <li><a class="collapsed" data-toggle="collapse" href="#togglePages-dev"><i class="menu-icon icon-cog">
+                            </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
+                            </i>Develope OPS</a>
+                                <ul id="togglePages-dev" class="collapse unstyled">
+                                    <li><a href="/login/"><i class="icon-inbox"></i>Command </a></li>
+                                    <li><a href="#"><i class="icon-inbox" disabled></i>Deploy Application </a></li>
+                                </ul>
+                            </li>
+                            <li><a href="/charts/"><i class="menu-icon icon-bar-chart"></i>Monitor </a></li>
+                            <li><a href="/login/"><i class="menu-icon icon-signout"></i>Logout </a></li>
+                        </ul>
+                    </div><!--/.sidebar-->
+                </div><!--/.span3-->
+
+
+				<div class="span9">
+					<div class="content">
+
+                    <!-- playbook upload start -->
+						<div class="module">
+							<div class="module-head">
+								<h3>Playbook</h3>
+							</div>
+                            <div class="module-body">
+                                <label>Upload Playbook yaml file:</label>
+                                  <form action={% url 'profile_image_upload' %} method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <input type="submit" value="upload file..." />
+                                  </form>
+                                    {% if flag_upload == 'success' %}
+                                      <form id="CmdForm" method="POST" action="/run_playbook/"><!-- Form -->
+                                      <table width=100%>
+                                      <tr>
+                                          <td align="left" valign="top"><input name="arg" id="arg" value="{{ image.image }}" size="3"></td>
+                                      </tr>
+
+                                      <tr>
+                                          <td align='left'><a href="javascript:void(0)" class="btn" OnClick="document.getElementById('CmdForm').submit();">
+                                              <span class="icon icon-beaker">Run Playbook</span></a>
+                                          </td>
+                                      </tr>
+                                      </table>
+                                      </form><!-- Form -->
+                                    {% endif %}
+                            </div><!-- module-body -->
+                        </div><!-- module -->
+                    <!-- playbook upload end -->
+
+                    <!-- playbook process start -->
+						<div class="module">
+                            <div class="module-head">
+                                <h3>Playbook Process</h3>
+                            </div>
+                            <br>
+                            <div class="module-body">
+                                <table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display" width="100%">
+                                    <thead>
+                                     <tr>
+                                        <th width="38px">Option</th>
+                                        <th width="260px">Description</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="playbookprocess">
+{#                                        {% for key,value in rt.detail.items %}#}
+{#                                            <tr>#}
+{#                                                <td><font color="black">{{ key }}</font></td>#}
+{#                                                <td>#}
+{#                                                    {% for v in value %}#}
+{#                                                        {% if v.rc == 0 %}#}
+{#                                                            <pre><font color="green">{{ v.stdout | safe}}</font></pre>#}
+{#                                                        {% else %}#}
+{#                                                            <pre><font color="red">{{ v.stderr | safe}}</font></pre>#}
+{#                                                        {% endif %}#}
+{#                                                    {% endfor %}#}
+{#                                                </td>#}
+{#                                                <td>#}
+{#                                                    {% for v in value %}#}
+{#                                                        {% if v.rc == 0 %}#}
+{#                                                            <a><pre><span class="icon icon-ok-circle"></span></pre></a>#}
+{#                                                        {% else %}#}
+{#                                                            <a><pre><span class="icon icon-ban-circle"></span></pre></a>#}
+{#                                                        {% endif %}#}
+{#                                                    {% endfor %}#}
+{#                                                </td>#}
+{#                                            </tr>#}
+{#                                        {% endfor %}#}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                        <th>Option</th>
+                                        <th>Description</th>
+                                    </tr>
+                                    </tfoot>
+                                </table><!-- table -->
+                            </div><!-- module-body -->
+                        </div><!-- module -->
+                    <!-- playbook process end -->
+
+                    <!-- playbook result start -->
+                        <div class="module">
+                            <div class="module-head">
+                                <h3>Playbook Result</h3>
+                            </div>
+                            <br>
+                            <div class="module-body">
+                                <table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display" width="100%">
+                                    <thead>
+                                     <tr>
+                                        <th width="38px">Ip</th>
+                                        <th width="260px">Result</th>
+                                        <th width="50px">Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="CmdRtList">
+                                        {% for key,value in rt.detail.items %}
+                                            <tr>
+                                                <td><font color="black">{{ key }}</font></td>
+                                                <td>
+                                                    {% for v in value %}
+                                                        {% if v.rc == 0 %}
+                                                            <pre><font color="green">{{ v.stdout | safe}}</font></pre>
+                                                        {% else %}
+                                                            <pre><font color="red">{{ v.stderr | safe}}</font></pre>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
+                                                <td>
+                                                    {% for v in value %}
+                                                        {% if v.rc == 0 %}
+                                                            <a><pre><span class="icon icon-ok-circle"></span></pre></a>
+                                                        {% else %}
+                                                            <a><pre><span class="icon icon-ban-circle"></span></pre></a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                        <th>Ip</th>
+                                        <th>Result</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </tfoot>
+                                </table><!-- table -->
+                            </div><!-- module-body -->
+                        </div><!-- module -->
+                    <!-- playbook result end -->
+
+                    </div><!-- content -->
+				</div><!-- span9-->
+{#				</div> <! --row---->#}
+			</div><!--/.row-->
+		</div><!--/.container-->
+	</div><!--/.wrapper-->
+
+	<div class="footer">
+		<div class="container">
+			<b class="copyright">&copy; 2018 Salmon - aaa.com </b> All rights reserved.
+		</div><!-- container -->
+	</div><!-- footer-->
+
+<!--/query/-->
+<script>
+    $(document).ready(function(){
+    // query hg
+            {% for hg in hostgroup %}
+          $("#query").click(function(){
+
+              var a = $("#a").val();
+            $.get("/query/",{'a':{{ hg.id }} }, function(ret){
+{#              $("#result{{hg.id}}").html(ret)#}
+              $('#tags').addTag(ret.host_ip)
+            })
+          });
+           {% endfor %}
+
+       // 字典 dict
+      {% for hg in hostgroup %}
+      $("#dict{{hg.id}}").click(function(){
+          $.getJSON('/ajax_dict/',function(ret){
+              //返回值 ret 在这里是一个字典
+              //$("#dict_result{{h.id}}").append(ret.twz + '<br>');
+              $("#dict_result{{hg.id}}").html(ret.twz);
+              // 也可以用 ret['twz']
+          })
+      })
+      {% endfor %}
+    });
+</script>
+<!--/query/-->
+
+<!--/script/-->
+    <!-- web js -->
+<script src="../static/scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="../static/scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+<script src="../static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../static/scripts/flot/jquery.flot.js" type="text/javascript"></script>
+<script src="../static/scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
+<script src="../static/scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
+<script src="../static/scripts/common.js" type="text/javascript"></script>
+
+    <!-- Ansible js -->
+<script type="text/javascript" src="../static/scripts/js/playbook.js"></script>
+<!--/script/-->
+
+</body>
+</html>
+

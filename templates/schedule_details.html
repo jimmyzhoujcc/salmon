@@ -1,0 +1,75 @@
+{% extends "base.html" %}{% load i18n %}{% load auth_extras %}
+{% block css %}
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="../static/css/jquery.dataTables-1.10.15.css">
+
+{% endblock %}
+
+{% block scripts %}
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="../static/scripts/js/jquery-1.10.2.min.js"></script>
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="../static/scripts/js/jquery.dataTables-1.10.15.js"></script>
+<!-- schedule table js -->
+<script type="text/javascript" src="../static/scripts/js/schedule_details.js"></script>
+{% endblock %}
+
+{% block span9_content %}
+<!-- modules schedule start -->
+    <div class="module">
+        <div class="module-head">
+            <h3>Schedule | Details</h3>
+        </div>
+        <div class="module-body">
+            <form class="my-ajax-form" method="POST" data-url='/cancel_post_json_task/'>
+                <table id="example" class="display" cellspacing="0" width="100%">
+                    <thead>
+                         <tr>
+                            <th width="128px">ETA</th>
+                            <th width="50px">Args</th>
+                            <th width="100px">Task id</th>
+                            <th width="18px">Status</th>
+                            <th width="200px">Result</th>
+                            <th width="10px">Operation</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schedule_table_tbody">
+                        {% for schedule in schedule_dic %}
+                            <tr>
+                                <td><font color="green">{{ schedule.eta }}</font></td>
+                                <td><font color="green">{{ schedule.args }}</font></td>
+                                <div><td id="sche_id">{{ schedule.sid }}</td></div>
+                                {% if schedule.state == "PENDING" %}
+                                    <td><font color="#00bfff">{{ schedule.state }}</font></td>
+                                    <td><font color="yellow"></font></td>
+                                    <td><a>cancel it</a></td>
+                                {% elif schedule.state == 'SUCCESS' %}
+                                    <td><font color="green">{{ schedule.state }}</font></td>
+                                    <td><font color="green">{{ schedule.result }}</font></td>
+                                    <td><span class="icon icon-ok-circle"></span></td>
+                                {% else %}
+                                    <td><font color="red">{{ schedule.state }}</font></td>
+                                    <td><font color="red">{{ schedule.result }}</font></td>
+                                    <td><span class="icon icon-ban-circle"></span></td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>ETA</th>
+                            <th>Args</th>
+                            <th>Task id</th>
+                            <th>Status</th>
+                            <th>Result</th>
+                            <th>Operation</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            <p class="alert-info">status: <span id="output"></span></p>
+            </form><!-- Form -->
+        </div><!--/.module-body-->
+    </div><!--/.module-->
+<!-- modules schedule end -->
+{% endblock %}
+

@@ -1,0 +1,197 @@
+﻿{% extends "base2.html" %}{% load i18n %}{% load auth_extras %}
+{% block css %}
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="../static/css/jquery.dataTables-1.10.15.css">
+
+{% endblock %}
+
+{% block scripts %}
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="../static/scripts/js/jquery-1.10.2.min.js"></script>
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="../static/scripts/js/jquery.dataTables-1.10.15.js"></script>
+
+<!-- table js -->
+<script type="text/javascript" charset="utf8">
+$(document).ready(function() {
+    var table = $('#example1').DataTable();
+    $('#example1 tbody').on('click', 'tr', function () {
+        $(this).toggleClass('selected')
+    })
+
+    var table = $('#example2').DataTable();
+    $('#example2 tbody').on('click', 'tr', function () {
+        $(this).toggleClass('selected')
+    })
+})
+</script>
+
+<!-- Ansible js -->
+<script type="text/javascript" src="../static/scripts/js/upload_asset.js"></script>
+{% endblock %}
+
+{% block span9_content %}
+<!-- module scripts upload start -->
+    <div class="module">
+            <div class="module-head">
+                <h3>Upload Assets</h3>
+            </div>
+            <div class="alert">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <strong><font size="3">Speed of executing bash script is depand on below 3 steps:</font><br>
+                                <font size="1">1.  Fill-in assets excel sheet<br>
+                                2.  Upload assets excel sheet,if success next step<br>
+                                3.  Fresh assets by fresh button</font>
+                        </strong><div id="notice_alert"></div>
+            </div>
+            <div class="module-body">
+                <label>Upload excel file:</label>
+                  <form action={% url 'host_list_upload' %} method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="upload asset..." />
+                  </form>
+                    {% if flag_upload == 'success' %}
+                      <form id="AssetForm" method="POST" action="/add_asset/"><!-- Form -->
+                      <table width=100%>
+                      <tr>
+                        </td>
+                        <td align="left" valign="top"><label>Scripts:</label><input name="import_file" id="import_file" value="{{ image.image }}" disabled="disabled" size="3"></td>
+                        <td align='right'><a href="javascript:void(0)" class="btn" OnClick="document.getElementById('AssetForm').submit();"><span class="icon icon-ok"></span><label>Execute</label></a></td>
+{#                        <td align='right'><a class="btn" OnClick="UploadAsset"><span class="icon icon-ok"></span><label>Upload</label></a></td>#}
+                      </tr>
+                      </table>
+                      </form><!-- Form -->
+                    {% endif %}
+            </div><!-- module-body -->
+        </div><!-- module -->
+<!-- module scripts upload end -->
+
+<!-- modules host list start -->
+    <div class="module">
+
+        <div class="module-head">
+            <h3>Asset | List</h3>
+        </div>
+        <div class="module-body">
+            <form class="my-ajax-form" method="POST" data-url='/cancel_post_json_task/'>
+                <table id="example1" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Type</th>
+                      <th>SN</th>
+                      <th>Status</th>
+                      <th>Management ip</th>
+                      <th>Expire date</th>
+                      <th>Manufacturer</th>
+                      <th>Model</th>
+                      <th>Group</th>
+                      <th>Project</th>
+                    </tr>
+                </thead>
+                    <tbody id="host_list_tbody">
+                        {% for asset in assets %}
+                            <tr>
+                                <td align="center">{{ asset.id }}</td>
+                            {% if asset.assets_type == 'server' %}
+                                <td align="center">{{ asset.assets_type }}</td>
+                            {% elif asset.assets_type == 'vmser' %}
+                                <td align="center">vm</td>
+                            {% endif %}
+                                <td align="center">{{ asset.sn }}</td>
+                            {% if asset.status == 0 %}
+                                <td align="center"><font color="green">Online</font></td>
+                            {% else %}
+                                <td align="center"><font color="red">Offline</font></td>
+                            {% endif %}
+                                <td align="center">{{ asset.management_ip }}</td>
+                                <td align="center">{{ asset.expire_date }}</td>
+                                <td align="center">{{ asset.manufacturer }}</td>
+                                <td align="center">{{ asset.model }}</td>
+                                <td align="center">Java{{ asset.group }}</td>
+                                <td align="center">{{ asset.project }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                          <th>Type</th>
+                          <th>SN</th>
+                          <th>Status</th>
+                          <th>Management ip</th>
+                          <th>Expire date</th>
+                          <th>Manufacturer</th>
+                          <th>Model</th>
+                          <th>Group</th>
+                          <th>Project</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </form><!-- Form -->
+        </div><!--/.module-body-->
+    </div><!--/.module-->
+<!-- modules schedule end -->
+
+<!-- modules host list start -->
+    <div class="module">
+    <div class="module-head">
+        <h3>Server | List</h3>
+    </div>
+    <div class="module-body">
+        <form class="my-ajax-form" method="POST" data-url='/cancel_post_json_task/'>
+            <table id="example2" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                  <th>Ip</th>
+                  <th>CPU</th>
+                  <th>CPU Num</th>
+                  <th>VCPU Num</th>
+                  <th>Ram</th>
+                  <th>Swap</th>
+                  <th>Disk</th>
+                  <th>Kernel</th>
+                  <th>Selinux</th>
+                  <th>System</th>
+                  <th>Asset Id</th>
+                </tr>
+            </thead>
+                <tbody id="host_list_tbody">
+                    {% for server in servers %}
+                        <tr>
+                            <td align="center">{{ server.ip }}</td>
+                            <td align="center">{{ server.cpu }}</td>
+                            <td align="center">{{ server.cpu_number }}</td>
+                            <td align="center">{{ server.vcpu_number }}</td>
+                            <td align="center">{{ server.ram_total }}</td>
+                            <td align="center">{{ server.swap }}</td>
+                            <td align="center">{{ server.disk_total }}</td>
+                            <td align="center">{{ server.kernel}}</td>
+                            <td align="center">{{ server.selinux }}</td>
+                            <td align="center">{{ server.system}}</td>
+                            <td align="center">{{ server.assets_id }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                      <th>Ip</th>
+                      <th>CPU</th>
+                      <th>CPU Num</th>
+                      <th>VCPU Num</th>
+                      <th>Ram</th>
+                      <th>Swap</th>
+                      <th>Disk</th>
+                      <th>Kernel</th>
+                      <th>Selinux</th>
+                      <th>System</th>
+                      <th>Asset Id</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </form><!-- Form -->
+    </div><!--/.module-body-->
+</div><!--/.module-->
+<!-- modules schedule end -->
+{% endblock %}
+

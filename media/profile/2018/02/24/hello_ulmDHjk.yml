@@ -1,0 +1,13 @@
+---
+- name: This is a test yaml playbook
+  hosts: test
+  gather_facts: no
+  tasks:
+  - name: Show hostname
+    shell: hostname
+  - name: Hello Jimmy Zhou
+    command : echo "hello Jimmy Zhou - test 5"
+  - name: Show ifconfig information
+    shell: ifconfig eth0
+  #   register: hello
+  # - debug: msg="{{ hello.stdout }}"

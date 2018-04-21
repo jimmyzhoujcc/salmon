@@ -1,0 +1,381 @@
+﻿{% extends "base.html" %}{% load i18n %}{% load auth_extras %}
+{% block css %}
+<!--/multi-select/-->
+<script src="../static/plugins/jquery.multi-select.js"></script>
+<link rel="stylesheet" type="text/css" href="../static/css/multi-select.css">
+
+<!--/tagsinput!-->
+<script src="../static/scripts/js/jquery.tagsinput.js"></script>
+<link rel="stylesheet" type="text/css" href="../static/css/jquery.tagsinput.css" />
+{% endblock %}
+
+{% block span9_content %}
+{% endblock %}
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Salmon</title>
+    <!--/salmon css/test is ok/-->
+	<link type="text/css" href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link type="text/css" href="../static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+	<link type="text/css" href="../static/css/theme.css" rel="stylesheet">
+	<link type="text/css" href="../static/images/icons/css/font-awesome.css" rel="stylesheet">
+{#	<link type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet'>#}
+
+    <!--/Dual select css/main/test is ok/-->
+    {#<link href="../static/css/dualselect.css" rel="stylesheet" type="text/css" >#}
+    <script type="text/javascript" src="../static/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/plugins/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../static/plugins/forms/autogrowtextarea.js"></script>
+    <script type="text/javascript" src="../static/plugins/forms/jquery.maskedinput.min.js"></script>
+    <script type="text/javascript" src="../static/plugins/forms/jquery.dualListBox.js"></script>
+    <script type="text/javascript" src="../static/plugins/forms/jquery.inputlimiter.min.js"></script>
+    <script type="text/javascript" src="../static/plugins/forms/chosen.jquery.min.js"></script>
+    <script type="text/javascript" src="../static/plugins/wizard/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="../static/plugins/ui/jquery.sourcerer.js"></script>
+    <script type="text/javascript" src="../static/plugins/custom.js"></script>
+    <script src="../static/scripts/js/vendor/jquery.min.js"></script>
+
+    <!--/multi-select/-->
+    <script src="../static/plugins/jquery.multi-select.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/multi-select.css">
+
+    <!--/tagsinput!-->
+    <script src="../static/scripts/js/jquery.tagsinput.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/jquery.tagsinput.css" />
+
+</head>
+<body>
+
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+					<i class="icon-reorder shaded"></i>
+				</a>
+
+			  	<a class="brand" href="index.html">
+			  		Edmin
+			  	</a>
+
+				<div class="nav-collapse collapse navbar-inverse-collapse">
+					<ul class="nav nav-icons">
+						<li class="active"><a href="#">
+							<i class="icon-envelope"></i>
+						</a></li>
+						<li><a href="#">
+							<i class="icon-eye-open"></i>
+						</a></li>
+						<li><a href="#">
+							<i class="icon-bar-chart"></i>
+						</a></li>
+					</ul>
+
+					<form class="navbar-search pull-left input-append" action="#">
+						<input type="text" class="span3">
+						<button class="btn" type="button">
+							<i class="icon-search"></i>
+						</button>
+					</form>
+				
+					<ul class="nav pull-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Item No. 1</a></li>
+								
+								<li><a href="#">Don't Click</a></li>
+								<li class="divider"></li>
+								<li class="nav-header">Example Header</li>
+								<li><a href="#">A Separated link</a></li>
+                            </ul>
+						</li>
+						
+						<li><a href="#">
+							Support
+						</a></li>
+						<li class="nav-user dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<img src="../static/images/user.png" class="nav-avatar" />
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Your Profile</a></li>
+								<li><a href="#">Edit Profile</a></li>
+								<li><a href="#">Account Settings</a></li>
+								<li class="divider"></li>
+								<li><a href="#">Logout</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div><!-- /.nav-collapse -->
+			</div>
+		</div><!-- /navbar-inner -->
+	</div><!-- /navbar -->
+
+
+
+	<div class="wrapper">
+		<div class="container">
+			<div class="row">
+				<div class="span3">
+					<div class="sidebar">
+
+						<ul class="widget widget-menu unstyled">
+							<li class="active">
+								<a href="index.html">
+									<i class="menu-icon icon-dashboard"></i>
+									Dashboard
+								</a>
+							</li>
+							<li>
+								<a href="activity.html">
+									<i class="menu-icon icon-bullhorn"></i>
+									News Feed
+								</a>
+							</li>
+							<li>
+								<a href="message.html">
+									<i class="menu-icon icon-inbox"></i>
+									Inbox
+									<b class="label green pull-right">11</b>
+								</a>
+							</li>
+							
+							<li>
+								<a href="task.html">
+									<i class="menu-icon icon-tasks"></i>
+									Tasks
+									<b class="label orange pull-right">19</b>
+								</a>
+							</li>
+						</ul><!--/.widget-nav-->
+
+						<ul class="widget widget-menu unstyled">
+                                <li><a href="ui-button-icon.html"><i class="menu-icon icon-bold"></i> Buttons </a></li>
+                                <li><a href="ui-typography.html"><i class="menu-icon icon-book"></i>Typography </a></li>
+                                <li><a href="form.html"><i class="menu-icon icon-paste"></i>Forms </a></li>
+                                <li><a href="table.html"><i class="menu-icon icon-table"></i>Tables </a></li>
+                                <li><a href="charts.html"><i class="menu-icon icon-bar-chart"></i>Charts </a></li>
+                            </ul><!--/.widget-nav-->
+
+						<ul class="widget widget-menu unstyled">
+							<li>
+								<a class="collapsed" data-toggle="collapse" href="#togglePages">
+									<i class="menu-icon icon-cog"></i>
+									<i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right"></i>
+									More Pages
+								</a>
+								<ul id="togglePages" class="collapse unstyled">
+									<li>
+										<a href="other-login.html">
+											<i class="icon-inbox"></i>
+											Login
+										</a>
+									</li>
+									<li>
+										<a href="other-user-profile.html">
+											<i class="icon-inbox"></i>
+											Profile
+										</a>
+									</li>
+									<li>
+										<a href="other-user-listing.html">
+											<i class="icon-inbox"></i>
+											All Users
+										</a>
+									</li>
+								</ul>
+							</li>
+							
+							<li>
+								<a href="#">
+									<i class="menu-icon icon-signout"></i>
+									Logout
+								</a>
+							</li>
+						</ul>
+
+					</div><!--/.sidebar-->
+				</div><!--/.span3-->
+
+
+				<div class="span9">
+					<div class="content">
+
+						<div class="module">
+							<div class="module-head">
+								<h3>Forms</h3>
+							</div>
+							<div class="module-body">
+									<br />
+
+                                <!-- Tags input starts -->
+{#                                <h5 class="demo-panel-title">Hosts you selected:</h5>#}
+                                <label>Hosts you selected:</label>
+{#                                <div><input name="tags_1"  type="text" class="tags" id="tags_1" value="" /></div>#}
+                                <div><input name="tags_1"  type="text" class="tags" id="tags" value="" /></div>
+                                <!-- Tags input ends -->
+
+                                </br>
+
+                                <!-- Form -->
+{#                                 <form id="demoform" action="#" method="post">#}
+                                 <form id="demoform" action="/query/" method="get">
+                                 <fieldset>
+                                   <div class="widget">
+                                       <div class="body">
+
+                                       <select id='callbacks' multiple='multiple'>
+                                      {% for hg in hostgroup %}
+                                       <option value="{{hg.name}}" id="dict_result{{h.id}}">{{ hg.name }}</option>
+                                      {% endfor %}
+                                  </select>
+                                        </br>
+                                       <button type="button" id='query'>提交</button>
+                                        </br>
+                                        </br>
+                                            <div class="widget">
+                                                <p><span id="result{{hg.id}}"></span></p>
+                                            </div>
+
+
+
+                                        <!--/ query form start / test is ok!-->
+                                        {% for hg in hostgroup %}
+                                            <label class="checkbox">
+{#													<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">#}
+													<p class="alert-info"><span id="result{{hg.id}}"></span></p>
+                                            </label>
+                                        {% endfor %}
+
+                                           </div><!--/.body-->
+                                    </div><!--/.widget-->
+                                    </fieldset>
+                                  </form><!-- Form -->
+                            </div><!--/.module-body-->
+                        </div><!--/.module-->
+					</div><!--/.content-->
+				</div><!--/.span9-->
+			</div><!--/.row-->
+		</div><!--/.container-->
+	</div><!--/.wrapper-->
+
+	<div class="footer">
+		<div class="container">
+			<b class="copyright">&copy; 2018 Salmon - aaa.com </b> All rights reserved.
+		</div>
+	</div>
+
+<!--/query/-->
+<script>
+    $(document).ready(function(){
+    // query hg
+            {% for hg in hostgroup %}
+          $("#query").click(function(){
+
+              var a = $("#a").val();
+            $.get("/query/",{'a':{{ hg.id }} }, function(ret){
+{#              $("#result{{hg.id}}").html(ret)#}
+              $('#tags').addTag(ret.host_ip)
+            })
+          });
+           {% endfor %}
+
+      // 求和 a + b
+{#      $("#sum").click(function(){#}
+{#        var a = $("#a").val();#}
+{#        var b = $("#b").val();#}
+{##}
+{#        $.get("/add/",{'a':a,'b':b}, function(ret){#}
+{#            $('#result').html(ret);#}
+{#        })#}
+{#      });#}
+
+      // 列表 list
+      $('#list').click(function(){
+          $.getJSON('/ajax_list/',function(ret){
+            //返回值 ret 在这里是一个列表
+            for (var i = ret.length - 1; i >= 0; i--) {
+              // 把 ret 的每一项显示在网页上
+              $('#list_result').append(' ' + ret[i])
+            };
+          })
+      })
+
+{#      // 字典 dict#}
+{#      $('#dict').click(function(){#}
+{#          $.getJSON('/ajax_dict/',function(ret){#}
+{#              //返回值 ret 在这里是一个字典#}
+{#              $('#dict_result').append(ret.twz + '<br>');#}
+{#              // 也可以用 ret['twz']#}
+{#          })#}
+{#      })#}
+
+       // 字典 dict
+      {% for hg in hostgroup %}
+      $("#dict{{hg.id}}").click(function(){
+          $.getJSON('/ajax_dict/',function(ret){
+              //返回值 ret 在这里是一个字典
+              //$("#dict_result{{h.id}}").append(ret.twz + '<br>');
+              $("#dict_result{{hg.id}}").html(ret.twz);
+              // 也可以用 ret['twz']
+          })
+      })
+      {% endfor %}
+    });
+</script>
+<!--/query/-->
+
+<!--/tagsinput/-->
+<script type="text/javascript">
+
+    function onAddTag(tag) {
+        alert("Added a tag: " + tag);
+    }
+    function onRemoveTag(tag) {
+        alert("Removed a tag: " + tag);
+    }
+
+    function onChangeTag(input,tag) {
+        alert("Changed a tag: " + tag);
+    }
+
+    $(function() {
+        $('#tags_2').tagsInput({width:'auto'});
+        $('#tags').tagsInput({
+				width: 'auto',
+				onAddTag: function(elem, elem_tags)
+				{
+					var languages = ['ACLU','Active Minds'];
+					$('.tag', elem_tags).each(function()
+					{
+						if($(this).text().search(new RegExp('\\b(' + languages.join('|') + ')\\b')) >= 0)
+							$(this).css('background-color', 'yellow');
+					});
+				},
+			});
+        });
+</script>
+<!--/tagsinput/-->
+
+<!--/multiselect/-->
+<script type="text/javascript">
+        $('#callbacks').multiSelect({
+          afterSelect: function TagsInput(value) {
+{#              $('#tags_1').addTag(value);#}
+              $('#tags').addTag(value);
+
+          },
+          afterDeselect: function(values){
+            $('#tags').removeTag(values);
+          }
+        });
+      // run pre selected options
+        $('#pre-selected-options').multiSelect();
+</script>
+<!--/multiselect/-->
+
+</body>
+</html>

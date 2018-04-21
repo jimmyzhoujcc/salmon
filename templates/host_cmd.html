@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>批量命令</title>
+<!-- We need to emulate IE7 only when we are to use excanvas -->
+<!--[if IE]>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<![endif]-->
+<!-- Favicons --> 
+	<title>Salmon</title>
+	<link type="text/css" href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link type="text/css" href="../static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+	<link type="text/css" href="../static/css/theme.css" rel="stylesheet">
+	<link type="text/css" href="../static/images/icons/css/font-awesome.css" rel="stylesheet">
+<!-- Main Stylesheet --> 
+<link rel="stylesheet" href="/static/css/main.css" type="text/css" />
+<!-- Your Custom Stylesheet --> 
+
+<!-- 用户列表css样式 --> 
+
+<!-- jQuery with plugins -->
+
+<!--
+Could be loaded remotely from Google CDN : 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+-->
+
+<!-- SaltStack By Xiaok -->
+<script type="text/javascript" src="../static/scripts/js/salt.js"></script>
+
+</head>
+<body>
+	<!-- Header -->
+{#	<%include file="header.html" args="curM='salt',ShowName=ShowName,uid=uid" />#}
+	<!-- End of Header -->
+	<!-- Page title -->
+	<div id="pagetitle">
+		<div class="wrapper">
+			<h1>批量命令</h1>
+			<!-- Quick search box -->
+{#			<form action="" method="get"><input class="" type="text" id="q" name="q" /></form>#}
+		</div>
+	</div>
+	<!-- End of Page title -->
+	
+	<!-- Page content -->
+	<div id="page">
+		<!-- Wrapper -->
+		<div class="wrapper">
+	      <div style="margin-top:10px;">
+	     <form id="CmdForm" method="POST" action="/run_cmd/">
+		  <table width=100%>
+		  <tr>
+			  <td align='left'>执行主机：<input name="tgt" id="tgt" value="localhost" >
+			           执行模块：<select name="fun" id="fun" >
+
+{#                      <option value="No Model" selected="selected">{}</option>#}
+                      {% for i in cmds %}
+                      <option value="{{ i }}">{{ i }}</option>
+                      {% endfor %}
+{#                      % for i in cmds:#}
+{#                      <option value="${i}">${i}</option>#}
+{#                      % endfor#}
+                 </select>
+                 执行命令：<input name="arg" id="arg" value="echo Hello World" size="32">
+			  </td>
+              <td align='right'><a href="javascript:void(0)" class="btn" OnClick="document.getElementById('CmdForm').submit();"><span class="icon icon-ok">&nbsp;</span>执行命令</a></td>
+{#              <td align='right'><a id="running_key" href="javascript:void(0)" class="btn" OnClick="SaltCmd();"><span class="icon icon-ok">&nbsp;</span>执行命令</a></td>#}
+          </tr>
+          </table>
+
+          </form>
+					<table class="table" id="datalist">
+						<thead>
+						 <tr>
+							<th width="38px">ID</th>
+							<th width="300px">执行输出</th>
+							<th width="300px">执行结果</th>
+					    </tr>
+						</thead>
+						<tbody id="CmdRtList">
+						  <tr>
+						    <td>1</td>
+                              {% if status == 'success' %}
+						        <td><font color="#00008b">{{ rt|safe }}</font></td>
+						        <td><font color="green">{{ status }}</font></td>
+                                  {% else %}
+                                  <td><font color="red">{{ rt|safe }}</font></td>
+                                  <td><font color="red">{{ status }}</font></td>
+                              {% endif %}
+						  </tr>
+						</tbody>
+						<tfoot>
+							<tr>
+							<th>ID</th>
+							<th>执行输出</th>
+							<th>执行结果</th>
+					    </tr>
+						</tfoot>
+					</table>
+	      </div>
+		</div>
+		<!-- End of Wrapper -->
+	</div>
+	<!-- End of Page content -->
+{#<%include file="footer.html" />	#}
+</body>
+</html>

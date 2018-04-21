@@ -1,0 +1,110 @@
+{% extends "base.html" %}{% load i18n %}{% load auth_extras %}
+
+{% block css %}
+    <style type="text/css">
+    pre
+    {
+      font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+      margin-bottom: 10px;
+      overflow: auto;
+      width: auto;
+      padding: 5px;
+      background-color: #eee;
+
+      width: 620px;
+      padding-bottom: 20px;
+      max-height: 600px;
+    }
+    </style>
+{% endblock %}
+
+{% block span9_content %}
+    <div class="module">
+
+        <div class="module-head">
+            <h3>Patch command</h3>
+        </div>
+
+        <div class="module-body">
+            <label>Patch Command:</label>
+            <!-- Form -->
+            <form id="CmdForm" method="POST" action="/run_cmd/">
+<table width=100%>
+<tr>
+<td align='left' valign="top"><label>Hosts:</label><input name="tgt" id="tgt" value="all" ></td>
+<td align="left" valign="top"><label>Module:</label>
+<select name="fun" id="fun" >
+
+      {% for i in cmds %}
+        <option value="{{ i }}" s>{{ i }}</option>
+      {% endfor %}
+</select>
+</td>
+<td align="left" valign="top"><label>Command:</label><input name="arg" id="arg" value="ifconfig" size="3"></td>
+<td align='right'><a href="javascript:void(0)" class="btn" OnClick="document.getElementById('CmdForm').submit();"><span class="icon icon-ok"></span><label>Execute</label></a></td>
+</tr>
+</table>
+
+</form>
+            <table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display" width="100%">
+    <thead>
+     <tr>
+        <th width="38px">ID</th>
+        <th width="300px">Result</th>
+        <th width="50px">Status</th>
+    </tr>
+    </thead>
+    <tbody id="CmdRtList">
+{#						  <tr>#}
+{#						    <td>1</td>#}
+{#                              {% if status == 'success' %}#}
+{#						        <td id="rt"><font color="green">{{ rt|safe }}</font></td>#}
+{#						        <td><font color="green">{{ status }}</font></td>#}
+{#                                  {% else %}#}
+{#                                  <td id="rt"><font color="red">{{ rt|safe }}</font></td>#}
+{#                                  <td><font color="red">{{ status }}</font></td>#}
+{#                              {% endif %}#}
+{#						  </tr>#}
+
+
+            {% for key,value in rt.detail.items %}
+                <tr>
+                    {% if value.0.rc  == 0 %}
+                        <td><font color="green">{{ key }}</font></td>
+{#                                            <td><font color="green">{{ value.0.stdout | linebreaks }}</font></td>#}
+                        <td><pre><font color="green">{{ value.0.stdout}}</font></pre></td>
+                        <td><font color="green">success</font></td>
+                    {% else %}
+                        <td><font color="red">{{ key }}</font></td>
+{#                        <td><pre><font color="red">{{ value.0.stderr }}</font></pre></td> #}
+                        <td><pre><font color="red">{{ value.0.stderr }}{{ value.0.msg }}</font></pre></td>
+                        <td><font color="red">failed</font></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+        <th>ID</th>
+        <th>Result</th>
+        <th>Status</th>
+    </tr>
+    </tfoot>
+</table>
+            <!-- Form -->
+        </div><!--/.module-body-->
+
+    </div><!--/.module-->
+{% endblock %}
+
+{% block scripts %}
+<!-- Ansible js -->
+<script type="text/javascript" src="../static/scripts/js/ansible.js"></script>
+{% endblock %}
+
+
+
+
+
+
+
