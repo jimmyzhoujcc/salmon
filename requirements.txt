@@ -50,7 +50,7 @@ funcsigs==1.0.2
 functools32==3.2.3.post2
 futures==3.2.0
 google-api-python-client==1.6.4
-httplib2==0.10.3
+httplib2==0.18.0
 hyperlink==18.0.0
 idna==2.6
 incremental==17.5.0
