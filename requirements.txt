@@ -88,7 +88,7 @@ pyparsing==2.0.1
 pytest==3.4.0
 python-dateutil==2.6.1
 pytz==2013.7
-PyYAML==3.12
+PyYAML==5.4
 redis==2.10.6
 requests==2.18.4
 simplejson==3.13.2
