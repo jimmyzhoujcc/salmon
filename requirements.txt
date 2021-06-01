@@ -97,7 +97,7 @@ six==1.11.0
 static3==0.7.0
 supervisor==3.3.4
 tornado==4.5.3
-urllib3==1.22
+urllib3==1.26.5
 virtualenv==15.1.0
 websocket-client==0.46.0
 xlrd==1.1.0
