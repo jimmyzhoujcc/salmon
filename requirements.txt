@@ -1,6 +1,6 @@
 altgraph==0.10.2
 amqp==1.4.9
-ansible==2.3.0.0
+ansible==4.2.0
 anyjson==0.3.3
 asgi-redis==1.4.3
 asgiref==1.1.2
